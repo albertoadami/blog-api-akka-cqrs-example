@@ -14,9 +14,7 @@ import scala.util.Success
 
 object BlogApiServiceApp {
 
-  //#start-http-server
   private def startHttpServer(routes: Route)(implicit system: ActorSystem[_]): Unit = {
-    // Akka HTTP still needs a classic ActorSystem to start
     import system.executionContext
 
     val futureBinding = Http().newServerAt("localhost", 8080).bind(routes)

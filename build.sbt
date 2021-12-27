@@ -24,3 +24,7 @@ lazy val root = (project in file(".")).
       "org.scalatest"     %% "scalatest"                % "3.1.4"         % Test
     )
   )
+  .configs(IntegrationTest)
+  .settings(
+    Defaults.itSettings
+  )

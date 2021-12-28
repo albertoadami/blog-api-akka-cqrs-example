@@ -7,6 +7,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import com.typesafe.config.ConfigFactory
 import it.adami.blog.http.routes.UserRoutes
+import it.adami.blog.service.UserService
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.Failure
@@ -36,7 +37,9 @@ object BlogApiServiceApp {
 
     val sharding = ClusterSharding(system)
 
-    val userRoutes = new UserRoutes
+    val userService = new UserService
+
+    val userRoutes = new UserRoutes(userService)
 
     startHttpServer(userRoutes.routes)(system)
 

@@ -1,10 +1,15 @@
 package it.adami.blog.http.validation.user
 
 import cats.data.ValidatedNec
-import it.adami.blog.http.validation.{DomainValidation, InvalidEmail, InvalidGender, InvalidPassword, IsEmpty}
+import it.adami.blog.http.validation.{
+  DomainValidation,
+  InvalidEmail,
+  InvalidGender,
+  InvalidPassword,
+  IsEmpty
+}
 import it.adami.blog.util.StringUtils
 import cats.implicits._
-
 
 trait UserValidator {
 

@@ -5,9 +5,8 @@ import java.text.SimpleDateFormat
 
 import scala.util.Try
 
-/**
- * Utility class for working with string transformation from JSON requests
- */
+/** Utility class for working with string transformation from JSON requests
+  */
 object StringUtils {
 
   def parseDateTimeFromString(date: String): Try[Date] = {

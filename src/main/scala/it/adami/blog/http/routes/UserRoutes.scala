@@ -1,6 +1,5 @@
 package it.adami.blog.http.routes
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -15,9 +14,7 @@ class UserRoutes(userService: UserService) extends GenericRoutes {
       pathEnd {
         post {
           entity(as[CreateUserRequest]) { req =>
-
             val createUserValidation = CreateUserValidation(req)
-
 
             complete(StatusCodes.OK)
           }

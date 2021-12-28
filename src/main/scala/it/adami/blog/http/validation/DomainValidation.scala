@@ -10,7 +10,7 @@ case class IsEmpty(field: String) extends DomainValidation {
 }
 
 case object InvalidEmail extends DomainValidation {
-  override def field: String = "email"
+  override def field: String        = "email"
   override def errorMessage: String = "The email is invalid"
 }
 

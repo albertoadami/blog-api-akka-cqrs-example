@@ -8,6 +8,7 @@ object CreateUserValidation extends UserValidator {
 
   def apply(req: CreateUserRequest): ValidationResult[CreateUserCommand] =
     (
+      validateUserName(req.username),
       validateFirstName(req.firstname),
       validateLastName(req.lastname),
       validateEmail(req.email),

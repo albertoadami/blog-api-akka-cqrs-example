@@ -1,5 +1,7 @@
 package it.adami.blog.http.validation.user
 
+import java.util.Date
+
 import cats.data.Validated.Valid
 import it.adami.blog.SpecBase
 import it.adami.blog.command.UserCommand.CreateUserCommand
@@ -8,22 +10,24 @@ import it.adami.blog.http.json.CreateUserRequest
 class CreateUserValidationSpec extends SpecBase {
 
   val request = CreateUserRequest(
+    username = "albertoadami",
     firstname = "alberto",
     lastname = "adami",
     email = "alberto@adami.it",
     password = "Passw@rd!",
-    dateOfBirth = "02-02-2993",
+    dateOfBirth = "02-02-1993",
     gender = "MALE"
   )
 
   "CreateUserValidation" must {
     "return true when validate a correct CreateUserRequest" in {
       val expectedResponse = CreateUserCommand(
+        userName = request.username,
         firstName = request.firstname,
         lastName = request.lastname,
         email = request.email,
         password = request.password,
-        dateOfBirth = request.dateOfBirth,
+        dateOfBirth = new Date(1993, 2, 2),
         gender = request.gender
       )
       val response = CreateUserValidation(request)

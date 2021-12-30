@@ -7,7 +7,8 @@ lazy val mockitoScalaVersion = "1.16.49"
 lazy val commonSettings = Seq(
   organization    := "it.adami.blog",
   scalaVersion    := "2.12.6",
-  scalacOptions += "-Ypartial-unification"
+  scalacOptions += "-Ypartial-unification",
+  parallelExecution in ThisBuild := false
 )
 
 lazy val dockerSettings: Seq[Def.Setting[_]] = Seq(

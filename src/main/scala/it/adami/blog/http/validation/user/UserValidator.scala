@@ -4,7 +4,13 @@ import java.time.LocalDate
 import java.util.Date
 
 import cats.data.ValidatedNec
-import it.adami.blog.http.validation.{DomainValidation, InvalidEmail, InvalidGender, InvalidPassword, IsEmpty}
+import it.adami.blog.http.validation.{
+  DomainValidation,
+  InvalidEmail,
+  InvalidGender,
+  InvalidPassword,
+  IsEmpty
+}
 import it.adami.blog.util.StringUtils
 import cats.implicits._
 
@@ -23,10 +29,13 @@ trait UserValidator {
   def validateLastName(lastName: String): ValidationResult[String] =
     if (checkIfStringIsEmpty(lastName)) IsEmpty("lastname").invalidNec else lastName.validNec
 
-  def validateBirthDate(birthDate: String): ValidationResult[Date] = {
+  def validateBirthDate(birthDate: String): ValidationResult[LocalDate] = {
     StringUtils
       .parseDateTimeFromString(birthDate)
-      .fold(_ => IsEmpty("dateOfBirth").invalidNec, _ => StringUtils.getDateFromString(birthDate).validNec)
+      .fold(
+        _ => IsEmpty("dateOfBirth").invalidNec,
+        _ => StringUtils.getDateFromString(birthDate).validNec
+      )
   }
 
   def validateGender(gender: String): ValidationResult[String] = {

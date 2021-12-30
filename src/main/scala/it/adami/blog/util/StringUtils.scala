@@ -1,7 +1,7 @@
 package it.adami.blog.util
 
-import java.util.Date
-import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import scala.util.Try
 
@@ -9,16 +9,16 @@ import scala.util.Try
   */
 object StringUtils {
 
-  def parseDateTimeFromString(date: String): Try[Date] = {
-    val dateForm = new SimpleDateFormat("dd-MM-yyyy")
+  def parseDateTimeFromString(date: String): Try[LocalDate] = {
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     Try {
-      dateForm.parse(date)
+      LocalDate.parse(date, formatter)
     }
   }
 
-  def getDateFromString(date: String): Date = {
-    val dateForm = new SimpleDateFormat("dd-MM-yyyy")
-    dateForm.parse(date)
+  def getDateFromString(date: String): LocalDate = {
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    LocalDate.parse(date, formatter)
   }
 
   def isValidEmail(email: String): Boolean = {

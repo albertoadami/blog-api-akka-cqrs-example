@@ -1,6 +1,7 @@
 lazy val akkaHttpVersion = "10.2.7"
 lazy val akkaVersion    = "2.6.17"
 lazy val slickVersion = "3.3.3"
+lazy val mockitoScalaVersion = "1.16.49"
 
 
 lazy val commonSettings = Seq(
@@ -45,7 +46,9 @@ lazy val root = (project in file(".")).
       "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion % Test,
       "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion     % Test,
       "com.typesafe.akka" %% "akka-persistence-testkit" % akkaVersion % Test,
-      "org.scalatest"     %% "scalatest"                % "3.1.4"         % Test
+      "org.scalatest"     %% "scalatest"                % "3.2.10"         % Test,
+      "org.mockito" %% "mockito-scala"                  % mockitoScalaVersion % Test,
+      "org.mockito" %% "mockito-scala-scalatest"                  % mockitoScalaVersion % Test
     )
   )
   .configs(IntegrationTest)

@@ -1,6 +1,6 @@
 package it.adami.blog.http.validation.user
 
-import java.util.Date
+import java.time.LocalDate
 
 import cats.data.Validated.Valid
 import it.adami.blog.SpecBase
@@ -27,7 +27,7 @@ class CreateUserValidationSpec extends SpecBase {
         lastName = request.lastname,
         email = request.email,
         password = request.password,
-        dateOfBirth = new Date(1993, 2, 2),
+        dateOfBirth = LocalDate.of(1993, 2, 2),
         gender = request.gender
       )
       val response = CreateUserValidation(request)

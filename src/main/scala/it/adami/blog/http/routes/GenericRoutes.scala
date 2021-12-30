@@ -9,15 +9,19 @@ import it.adami.blog.http.json.{ErrorItem, ErrorsResponse}
 import it.adami.blog.http.validation.DomainValidation
 import spray.json._
 
-
-trait GenericRoutes extends Directives with  JsonFormats with SprayJsonSupport with DefaultJsonProtocol with LazyLogging {
+trait GenericRoutes
+    extends Directives
+    with JsonFormats
+    with SprayJsonSupport
+    with DefaultJsonProtocol
+    with LazyLogging {
 
   def routes: Route
 
   protected def buildErrorsResponse(errors: NonEmptyChain[DomainValidation]): ErrorsResponse = {
-    val errorItems = errors.map(item => ErrorItem(Some(item.field), item.errorMessage)).toNonEmptyList.toList
+    val errorItems =
+      errors.map(item => ErrorItem(Some(item.field), item.errorMessage)).toNonEmptyList.toList
     ErrorsResponse(errorItems)
   }
-
 
 }

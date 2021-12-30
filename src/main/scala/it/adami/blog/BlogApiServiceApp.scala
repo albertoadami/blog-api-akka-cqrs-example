@@ -44,9 +44,10 @@ object BlogApiServiceApp {
     val sharding = ClusterSharding(system)
 
     val UserTypeKey = EntityTypeKey[UserCommand]("User")
-    val userShardRegion: ActorRef[ShardingEnvelope[UserCommand]] = sharding.init(Entity(typeKey = UserTypeKey) { entityContext =>
-      UserBehavior(PersistenceId(entityContext.entityTypeKey.name, entityContext.entityId))
-    })
+    val userShardRegion: ActorRef[ShardingEnvelope[UserCommand]] =
+      sharding.init(Entity(typeKey = UserTypeKey) { entityContext =>
+        UserBehavior(PersistenceId(entityContext.entityTypeKey.name, entityContext.entityId))
+      })
 
     val userService = new UserService(userShardRegion)
 
@@ -55,9 +56,9 @@ object BlogApiServiceApp {
     val userRoutes = new UserRoutes(userService)
 
     val allRoutes = Seq(
-                    userRoutes
+      userRoutes
     ).map { item =>
-      pathPrefix("api" / "rest" / "v1.0"){
+      pathPrefix("api" / "rest" / "v1.0") {
         item.routes
       }
     }.reduceLeft(_ ~ _)

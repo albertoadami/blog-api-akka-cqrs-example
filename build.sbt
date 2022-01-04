@@ -1,6 +1,5 @@
 lazy val akkaHttpVersion = "10.2.7"
-lazy val akkaVersion    = "2.6.17"
-lazy val slickVersion = "3.3.3"
+lazy val akkaVersion    = "2.6.18"
 lazy val mockitoScalaVersion = "1.16.49"
 
 
@@ -32,12 +31,9 @@ lazy val root = (project in file(".")).
       "com.typesafe.akka" %% "akka-cluster-typed"       % akkaVersion,
       "com.typesafe.akka" %% "akka-cluster-sharding-typed" % akkaVersion,
       "com.typesafe.akka" %% "akka-persistence-typed" % akkaVersion,
-      //jdbc plugin
-      "com.lightbend.akka" %% "akka-persistence-jdbc" % "5.0.4",
-      "com.typesafe.akka" %% "akka-persistence-query" % akkaVersion,
-      "com.typesafe.slick" %% "slick" % slickVersion,
-      "com.typesafe.slick" %% "slick-hikaricp" % slickVersion,
-      "org.postgresql" % "postgresql" % "42.3.1",
+      "com.typesafe.akka" %% "akka-serialization-jackson" % akkaVersion,
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.11.4",
+      "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
       //cats
       "org.typelevel" %% "cats-core" % "2.3.0",
       //logging

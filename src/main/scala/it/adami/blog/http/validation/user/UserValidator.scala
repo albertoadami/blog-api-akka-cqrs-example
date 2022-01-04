@@ -1,7 +1,6 @@
 package it.adami.blog.http.validation.user
 
 import java.time.LocalDate
-import java.util.Date
 
 import cats.data.ValidatedNec
 import it.adami.blog.http.validation.{
@@ -13,6 +12,7 @@ import it.adami.blog.http.validation.{
 }
 import it.adami.blog.util.StringUtils
 import cats.implicits._
+import it.adami.blog.model.Gender
 
 trait UserValidator {
 
@@ -38,9 +38,10 @@ trait UserValidator {
       )
   }
 
-  def validateGender(gender: String): ValidationResult[String] = {
+  def validateGender(gender: String): ValidationResult[Gender] = {
     val genderUp = gender.toUpperCase
-    if (genderUp == "MALE" || genderUp == "FEMALE") genderUp.validNec else InvalidGender.invalidNec
+    if (genderUp == Gender.Male.name || genderUp == Gender.Female.name) Gender(genderUp).validNec
+    else InvalidGender.invalidNec
   }
 
   def validateEmail(email: String): ValidationResult[String] =

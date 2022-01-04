@@ -2,6 +2,8 @@ package it.adami.blog.command
 
 import java.time.LocalDate
 
+import it.adami.blog.model.Gender
+
 sealed trait UserCommand {}
 
 object UserCommand {
@@ -12,6 +14,6 @@ object UserCommand {
       email: String,
       password: String,
       dateOfBirth: LocalDate,
-      gender: String
+      gender: Gender
   ) extends UserCommand
 }

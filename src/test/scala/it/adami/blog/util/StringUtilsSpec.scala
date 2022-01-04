@@ -1,6 +1,6 @@
 package it.adami.blog.util
 
-import it.adami.blog.SpecBase
+import it.adami.blog.common.SpecBase
 
 class StringUtilsSpec extends SpecBase {
 

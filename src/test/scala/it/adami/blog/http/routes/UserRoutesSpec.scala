@@ -2,7 +2,7 @@ package it.adami.blog.http.routes
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
-import it.adami.blog.HttpSpecBase
+import it.adami.blog.common.HttpSpecBase
 import it.adami.blog.http.json.{CreateUserRequest, ErrorItem, ErrorsResponse, UserCratedResponse}
 import it.adami.blog.model.{UserId, UserNameAlreadyInUseError}
 import it.adami.blog.service.UserService

@@ -1,4 +1,4 @@
-package it.adami.blog
+package it.adami.blog.common
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.testkit.ScalatestRouteTest

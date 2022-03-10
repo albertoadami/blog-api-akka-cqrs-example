@@ -1,6 +1,6 @@
 package it.adami.blog.actor.akka
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
@@ -9,16 +9,18 @@ import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import it.adami.blog.actor.akka.command.UserCommand
 import it.adami.blog.actor.akka.command.UserCommand.CreateUserCommand
 import it.adami.blog.actor.akka.event.{CreatedUserEvent, UserEvent}
+import it.adami.blog.actor.akka.result.{UserCreated, UsernameAlreadyInUse}
 import it.adami.blog.actor.akka.state.{State, UserState}
+import it.adami.blog.model.UserId
 
-object UserBehavior {
+object UserActor {
 
   private def commandHandler(
       context: ActorContext[UserCommand]
   ): (State[UserState], UserCommand) => Effect[UserEvent, State[UserState]] = { (state, cmd) =>
     cmd match {
       case cmd: CreateUserCommand if state.value.isEmpty =>
-        context.log.info("Received CreateUserCommand cmd {}", cmd)
+        context.log.info("Received cmd {}", cmd)
         val event = CreatedUserEvent(
           userName = cmd.username,
           firstName = cmd.firstName,
@@ -27,9 +29,12 @@ object UserBehavior {
           password = cmd.password,
           dateOfBirth = cmd.dateOfBirth,
           gender = cmd.gender,
-          creationDate = LocalDateTime.now()
+          creationDate = LocalDate.now()
         )
-        Effect.persist(event)
+        Effect.persist(event).thenRun { _ => cmd.replyTo ! UserCreated(UserId(cmd.username)) }
+      case cmd: CreateUserCommand =>
+        Effect.none.thenRun(_ => cmd.replyTo ! UsernameAlreadyInUse(UserId(cmd.username)))
+
     }
   }
 

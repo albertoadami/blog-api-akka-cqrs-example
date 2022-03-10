@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 import it.adami.blog.model.Gender
 
-sealed trait UserCommand {}
+sealed trait UserCommand
 
 object UserCommand {
   case class CreateUserCommand(

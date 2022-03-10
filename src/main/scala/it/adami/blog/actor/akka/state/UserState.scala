@@ -1,6 +1,6 @@
 package it.adami.blog.actor.akka.state
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 import it.adami.blog.model.Gender
 
@@ -12,7 +12,7 @@ final case class UserState(
     password: String,
     dateOfBirth: LocalDate,
     gender: Gender,
-    creationDate: LocalDateTime,
-    lastUpdateDate: Option[LocalDateTime],
+    creationDate: LocalDate,
+    lastUpdateDate: Option[LocalDate],
     active: Boolean
 )

@@ -9,12 +9,14 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.persistence.typed.PersistenceId
+import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
-import it.adami.blog.actor.akka.UserBehavior
+import it.adami.blog.actor.akka.UserActor
 import it.adami.blog.actor.akka.command.UserCommand
 import it.adami.blog.http.routes.{HealthRoutes, UserRoutes}
 import it.adami.blog.service.UserService
 
+import scala.concurrent.duration._
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.Failure
 import scala.util.Success
@@ -41,12 +43,14 @@ object BlogApiServiceApp {
     implicit val system: ActorSystem[Nothing]               = ActorSystem(Behaviors.empty, "blog-api-system")
     implicit val executionContext: ExecutionContextExecutor = system.executionContext
 
+    implicit val timeout: Timeout = 30.seconds
+
     val sharding = ClusterSharding(system)
 
     val UserTypeKey = EntityTypeKey[UserCommand]("User")
     val userShardRegion: ActorRef[ShardingEnvelope[UserCommand]] =
       sharding.init(Entity(typeKey = UserTypeKey) { entityContext =>
-        UserBehavior(PersistenceId(entityContext.entityTypeKey.name, entityContext.entityId))
+        UserActor(PersistenceId(entityContext.entityTypeKey.name, entityContext.entityId))
       })
 
     val userService = new UserService(userShardRegion)

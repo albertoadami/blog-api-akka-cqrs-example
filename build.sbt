@@ -11,7 +11,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val dockerSettings: Seq[Def.Setting[_]] = Seq(
-  dockerBaseImage := "openjdk:8-slim",
+  dockerBaseImage := "openjdk:12-slim",
   daemonUserUid in Docker := None,
   daemonUser in Docker    := "daemon",
   dockerExposedPorts := Seq(8080)

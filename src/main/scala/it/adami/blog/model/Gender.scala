@@ -23,7 +23,7 @@ object Gender extends LazyLogging {
   }
 
   def apply(string: String): Gender = string match {
-    case Male.name => Male
+    case Male.name   => Male
     case Female.name => Female
     case other =>
       val message = "Illegal value $other for  Gender.apply"

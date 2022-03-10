@@ -15,5 +15,5 @@ final case class CreatedUserEvent(
     password: String,
     dateOfBirth: LocalDate,
     gender: Gender,
-    creationDate: LocalDateTime
+    creationDate: LocalDate
 ) extends UserEvent

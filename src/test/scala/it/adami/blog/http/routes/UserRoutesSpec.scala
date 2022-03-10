@@ -4,8 +4,9 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import it.adami.blog.common.HttpSpecBase
 import it.adami.blog.http.json.{CreateUserRequest, ErrorItem, ErrorsResponse, UserCratedResponse}
-import it.adami.blog.model.{UserId, UserNameAlreadyInUseError}
+import it.adami.blog.model.UserId
 import it.adami.blog.service.UserService
+import it.adami.blog.service.model.CreateUserError.UserNameAlreadyInUseError
 
 import scala.concurrent.Future
 
@@ -16,6 +17,8 @@ class UserRoutesSpec extends HttpSpecBase {
     val userServiceMock: UserService = mock[UserService]
     val subject                      = new UserRoutes(userServiceMock)
   }
+
+  system
 
   "POST /users" must {
     val username = "aadami"
@@ -39,7 +42,7 @@ class UserRoutesSpec extends HttpSpecBase {
 
     "return Conflict if the username is already in use" in new Fixture {
       userServiceMock.createUser(*) returns Future.successful(
-        Left(new UserNameAlreadyInUseError(username))
+        Left(UserNameAlreadyInUseError(username))
       )
       Post("/users", validCreateUserRequest) ~> Route.seal(subject.routes) ~> check {
         status mustBe StatusCodes.Conflict

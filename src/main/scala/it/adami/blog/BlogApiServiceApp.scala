@@ -1,13 +1,22 @@
 package it.adami.blog
 
-import akka.actor.typed.ActorSystem
+import akka.actor.typed.{ActorRef, ActorSystem}
 import akka.actor.typed.scaladsl.Behaviors
-import akka.cluster.sharding.typed.scaladsl.ClusterSharding
+import akka.cluster.sharding.typed.ShardingEnvelope
+import akka.cluster.sharding.typed.scaladsl.EntityTypeKey
+import akka.cluster.sharding.typed.scaladsl.{ClusterSharding, Entity}
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
+import akka.persistence.typed.PersistenceId
+import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
-import it.adami.blog.http.routes.UserRoutes
+import it.adami.blog.actor.akka.UserActor
+import it.adami.blog.actor.akka.command.UserCommand
+import it.adami.blog.http.routes.{HealthRoutes, UserRoutes}
+import it.adami.blog.service.UserService
 
+import scala.concurrent.duration._
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.Failure
 import scala.util.Success
@@ -17,7 +26,7 @@ object BlogApiServiceApp {
   private def startHttpServer(routes: Route)(implicit system: ActorSystem[_]): Unit = {
     import system.executionContext
 
-    val futureBinding = Http().newServerAt("localhost", 8080).bind(routes)
+    val futureBinding = Http().newServerAt("localhost", 9000).bind(routes)
     futureBinding.onComplete {
       case Success(binding) =>
         val address = binding.localAddress
@@ -34,11 +43,31 @@ object BlogApiServiceApp {
     implicit val system: ActorSystem[Nothing]               = ActorSystem(Behaviors.empty, "blog-api-system")
     implicit val executionContext: ExecutionContextExecutor = system.executionContext
 
+    implicit val timeout: Timeout = 30.seconds
+
     val sharding = ClusterSharding(system)
 
-    val userRoutes = new UserRoutes
+    val UserTypeKey = EntityTypeKey[UserCommand]("User")
+    val userShardRegion: ActorRef[ShardingEnvelope[UserCommand]] =
+      sharding.init(Entity(typeKey = UserTypeKey) { entityContext =>
+        UserActor(PersistenceId(entityContext.entityTypeKey.name, entityContext.entityId))
+      })
 
-    startHttpServer(userRoutes.routes)(system)
+    val userService = new UserService(userShardRegion)
+
+    val healthRoutes = new HealthRoutes
+
+    val userRoutes = new UserRoutes(userService)
+
+    val allRoutes = Seq(
+      userRoutes
+    ).map { item =>
+      pathPrefix("api" / "rest" / "v1.0") {
+        item.routes
+      }
+    }.reduceLeft(_ ~ _)
+
+    startHttpServer(healthRoutes.routes ~ allRoutes)(system)
 
   }
 }

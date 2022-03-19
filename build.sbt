@@ -14,12 +14,14 @@ lazy val dockerSettings: Seq[Def.Setting[_]] = Seq(
   dockerBaseImage := "openjdk:12-slim",
   daemonUserUid in Docker := None,
   daemonUser in Docker    := "daemon",
-  dockerExposedPorts := Seq(8080)
+  dockerExposedPorts := Seq(9000)
 )
 
 lazy val root = (project in file(".")).
-  enablePlugins(DockerPlugin, JavaServerAppPackaging, BuildInfoPlugin).
-  settings(
+  enablePlugins(DockerPlugin, JavaServerAppPackaging, BuildInfoPlugin)
+    .settings(commonSettings: _*)
+    .settings(dockerSettings: _*)
+    .settings(
     commonSettings,
     name := "blog-api-akka-cqrs-example",
     libraryDependencies ++= Seq(

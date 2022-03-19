@@ -18,8 +18,6 @@ class UserRoutesSpec extends HttpSpecBase {
     val subject                      = new UserRoutes(userServiceMock)
   }
 
-  system
-
   "POST /users" must {
     val username = "aadami"
     val validCreateUserRequest =
